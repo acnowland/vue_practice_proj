@@ -1,30 +1,81 @@
 <template>
   <div class="container">
-    <Header title = "Task Tracker"/> 
+    <Header @toggle-button="toggleButton" title="Task Tracker" :showAddTask="showAddTask"/>
+    <div v-if="showAddTask"> 
+      <AddTask @add-task="addTask"/> 
+    </div>
+    <Tasks @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks" />
   </div>
 </template>
 
 <script>
-
-import Header from './components/Header.vue'
+import Header from "./components/Header.vue";
+import Tasks from "./components/Tasks.vue";
+import AddTask from './components/AddTask.vue'
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Header
-  }
-}
+    Header,
+    Tasks,
+    AddTask
+  },
+  data() {
+    return {
+      tasks: [],
+      showAddTask: false
+    };
+  },
+  methods:{
+    deleteTask(id){
+      this.tasks = this.tasks.filter((task) => task.id !== id)
+      },
+    toggleReminder(id){
+      console.log(id)
+      this.tasks = this.tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder}: task)
+      }, 
+      addTask(newTask){
+        this.tasks = [...this.tasks,newTask]
+      },
+      toggleButton(){
+        this.showAddTask = !this.showAddTask
+      }
+
+  },
+  created() {
+    this.tasks = [
+      {
+        id: 1,
+        text: "Doctors Appt",
+        day: "March 1st at 2:30PM",
+        reminder: true,
+      },
+      {
+        id: 2,
+        text: "meeting at school",
+        day: "March 3rd at 1:30PM",
+        reminder: true,
+      },
+      {
+        id: 3,
+        text: "shave dog",
+        day: "March 5th at 6:50 PM",
+        reminder: false,
+      },
+    ];
+  },
+};
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .container {
   max-width: 500px;
@@ -58,5 +109,4 @@ body {
   display: block;
   width: 100%;
 }
-
 </style>

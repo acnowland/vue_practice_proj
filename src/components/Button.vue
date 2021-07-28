@@ -10,10 +10,11 @@ export default {
   props: {
     color: String,
     text: String,
+    showAddTask: Boolean
   },
   methods: {
     onClick() {
-      console.log("clicked");
+      this.$emit('toggle-button')
     },
   },
 };
